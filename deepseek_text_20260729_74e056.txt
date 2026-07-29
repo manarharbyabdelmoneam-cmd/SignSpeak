@@ -1,0 +1,65 @@
+signbridge-ai/
+│
+├── 📄 app.py                              # نقطة الدخول الرئيسية
+├── 📄 requirements.txt                    # تبعيات المشروع
+├── 📄 README.md                           # توثيق
+├── 📄 .gitignore
+│
+├── 📂 config/                             # إعدادات المشروع
+│   ├── 📄 settings.py                     # إعدادات عامة
+│   └── 📄 label_mapping.json             # قاموس الإشارات
+│
+├── 📂 src/                                # كود المصدر
+│   │
+│   ├── 📂 core/                           # النواة - لا تعتمد على شيء
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 landmark_extractor.py       # استخراج الإحداثيات
+│   │   ├── 📄 sequence_builder.py         # بناء المتوالية
+│   │   └── 📄 predictor.py               # التنبؤ
+│   │
+│   ├── 📂 services/                       # خدمات - تعتمد على core
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 buffer_service.py           # إدارة البث المباشر
+│   │   ├── 📄 video_service.py            # معالجة الفيديو المرفوع
+│   │   └── 📄 model_service.py            # تحميل وإدارة النموذج
+│   │
+│   ├── 📂 ui/                             # واجهة المستخدم
+│   │   ├── 📄 __init__.py
+│   │   ├── 📂 components/                 # مكونات قابلة لإعادة الاستخدام
+│   │   │   ├── 📄 __init__.py
+│   │   │   ├── 📄 camera_component.py     # مكون الكاميرا
+│   │   │   ├── 📄 upload_component.py     # مكون رفع الفيديو
+│   │   │   └── 📄 result_component.py     # مكون عرض النتيجة
+│   │   │
+│   │   └── 📂 pages/                      # صفحات التطبيق
+│   │       ├── 📄 __init__.py
+│   │       ├── 📄 home_page.py            # الصفحة الرئيسية
+│   │       ├── 📄 live_page.py            # صفحة الترجمة المباشرة
+│   │       ├── 📄 upload_page.py          # صفحة رفع الفيديو
+│   │       └── 📄 dashboard_page.py       # صفحة الإحصائيات
+│   │
+│   └── 📂 utils/                          # أدوات مساعدة
+│       ├── 📄 __init__.py
+│       ├── 📄 logger.py                   # تسجيل الأخطاء
+│       └── 📄 helpers.py                  # دوال مساعدة
+│
+├── 📂 models/                             # النماذج المدربة
+│   ├── 📄 .gitkeep
+│   └── 📄 model_metadata.json            # بيانات النموذج
+│
+├── 📂 assets/                             # موارد ثابتة
+│   ├── 📂 images/
+│   │   └── 📄 logo.png
+│   └── 📂 styles/
+│       └── 📄 custom.css
+│
+├── 📂 tests/                              # الاختبارات
+│   ├── 📄 __init__.py
+│   ├── 📄 test_landmark_extractor.py
+│   ├── 📄 test_sequence_builder.py
+│   ├── 📄 test_predictor.py
+│   └── 📄 test_buffer_service.py
+│
+└── 📂 docs/                               # وثائق إضافية
+    ├── 📄 architecture.md                 # هذه الوثيقة
+    └── 📄 api_reference.md               # مرجع API
