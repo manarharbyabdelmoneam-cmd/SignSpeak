@@ -11,6 +11,7 @@ import streamlit as st
 from src.services.video_service import VideoService
 from src.ui.components.upload_component import render_upload_component
 from src.ui.components.result_component import render_result_component
+from src.ui.pages.dashboard_page import log_prediction_to_session
 
 
 def render_upload_page(video_service: VideoService) -> None:
@@ -27,3 +28,4 @@ def render_upload_page(video_service: VideoService) -> None:
     if result is not None:
         st.divider()
         render_result_component(result)
+        log_prediction_to_session(result)
