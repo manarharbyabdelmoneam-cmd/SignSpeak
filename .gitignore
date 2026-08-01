@@ -1,1 +1,73 @@
+# ============================================================
+# Python
+# ============================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
 
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Environment variables / secrets
+.env
+.streamlit/secrets.toml
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ============================================================
+# Models
+# ============================================================
+
+# MediaPipe's own Hand/Pose detector files - auto-downloaded at runtime
+# by model_service.py, should NEVER be committed (see model_service.py)
+models/hand_landmarker.task
+models/pose_landmarker_full.task
+
+# The full Keras model (.keras) is NOT used in production (we deploy
+# with TFLite only, USE_TFLITE=True). Excluded to keep the repo light.
+# Keep a local copy for retraining/experimentation if needed.
+models/*.keras
+models/*.h5
+models/*.pt
+
+# --- IMPORTANT: signbridge_best_model.tflite is OUR trained model.
+# There's no download URL for it - it MUST be committed, so it is
+# intentionally NOT ignored here. Same for label_mapping.json,
+# model_metadata.json, deployment_config.json.
+
+# ============================================================
+# Data / datasets
+# ============================================================
+data/
+*.csv
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# ============================================================
+# OS / IDE
+# ============================================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ============================================================
+# Logs
+# ============================================================
+*.log
+logs/
+
+# ============================================================
+# Streamlit cache
+# ============================================================
+.streamlit/
