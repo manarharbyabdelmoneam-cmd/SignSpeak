@@ -8,9 +8,14 @@ Provides one simple entry point - process_video() - so the UI layer
 never touches MediaPipe or Keras directly. This module has no Streamlit
 imports, so it can be wrapped with st.cache_resource in the UI, or reused
 in tests / a future API unchanged.
+
+MediaPipe's own Hand/Pose detector files (*.task) are downloaded
+automatically on first run if missing, instead of being committed to
+the repo -- keeps the repo lean and avoids Git LFS.
 """
 
 import logging
+import urllib.request
 from pathlib import Path
 from typing import Union
 
@@ -22,10 +27,38 @@ from config.settings import MODELS_DIR, SEQUENCE_LENGTH
 
 logger = logging.getLogger(__name__)
 
-# MediaPipe's own hand/pose detector files (not the trained SignBridge
-# model). These must be downloaded separately - see the note below.
 HAND_MODEL_FILENAME = "hand_landmarker.task"
 POSE_MODEL_FILENAME = "pose_landmarker_full.task"
+
+# Official MediaPipe model URLs (Google Cloud Storage, stable versioned paths)
+HAND_MODEL_URL = (
+    "https://storage.googleapis.com/mediapipe-models/hand_landmarker/"
+    "hand_landmarker/float16/1/hand_landmarker.task"
+)
+POSE_MODEL_URL = (
+    "https://storage.googleapis.com/mediapipe-models/pose_landmarker/"
+    "pose_landmarker_full/float16/1/pose_landmarker_full.task"
+)
+
+
+def _ensure_model_file(path: Path, url: str) -> Path:
+    """Download a MediaPipe model file to `path` if it doesn't exist yet."""
+    if path.exists():
+        return path
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    logger.info("Downloading MediaPipe model: %s -> %s", url, path)
+
+    try:
+        urllib.request.urlretrieve(url, path)
+    except Exception as error:
+        raise RuntimeError(
+            f"Failed to download required MediaPipe model from {url}. "
+            f"Check network access to storage.googleapis.com. Original error: {error}"
+        ) from error
+
+    logger.info("Downloaded MediaPipe model successfully: %s", path.name)
+    return path
 
 
 class ModelService:
@@ -44,8 +77,13 @@ class ModelService:
         sequence_length: int = SEQUENCE_LENGTH,
     ):
         models_dir = Path(models_dir)
-        hand_model_path = models_dir / HAND_MODEL_FILENAME
-        pose_model_path = models_dir / POSE_MODEL_FILENAME
+
+        hand_model_path = _ensure_model_file(
+            models_dir / HAND_MODEL_FILENAME, HAND_MODEL_URL
+        )
+        pose_model_path = _ensure_model_file(
+            models_dir / POSE_MODEL_FILENAME, POSE_MODEL_URL
+        )
 
         logger.info("Loading LandmarkExtractor (MediaPipe Hand + Pose)...")
         self.landmark_extractor = LandmarkExtractor(
@@ -75,10 +113,9 @@ class ModelService:
             }
 
         Raises FileNotFoundError if the video doesn't exist, or ValueError
-        if it's unreadable / has no usable gesture (too few frames, no
-        active segment). Callers (video_service.py) should catch
-        ValueError and show a friendly "couldn't detect a sign, try
-        another video" message instead of crashing.
+        if it's unreadable / has no usable gesture. Callers
+        (video_service.py) should catch ValueError and show a friendly
+        "couldn't detect a sign, try another video" message.
         """
         video_path = Path(video_path)
         if not video_path.exists():
