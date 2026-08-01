@@ -1,1 +1,55 @@
-
+{
+  "num_classes": 12,
+  "input_shape": [80, 153],
+  "confidence_threshold": 0.6,
+  "labels": {
+    "0": {
+      "en": "Alhamdulillah",
+      "ar": "الحمد لله"
+    },
+    "1": {
+      "en": "Good bye",
+      "ar": "مع السلامة"
+    },
+    "2": {
+      "en": "Good evening",
+      "ar": "مساء الخير"
+    },
+    "3": {
+      "en": "Good morning",
+      "ar": "صباح الخير"
+    },
+    "4": {
+      "en": "How are you",
+      "ar": "كيف حالك"
+    },
+    "5": {
+      "en": "I am fine",
+      "ar": "أنا بخير"
+    },
+    "6": {
+      "en": "I am pleased to meet you",
+      "ar": "أنا سعيد بلقائك"
+    },
+    "7": {
+      "en": "I am sorry",
+      "ar": "أنا آسف"
+    },
+    "8": {
+      "en": "Not bad",
+      "ar": "لا بأس"
+    },
+    "9": {
+      "en": "Salam aleikum",
+      "ar": "السلام عليكم"
+    },
+    "10": {
+      "en": "Sorry",
+      "ar": "آسف"
+    },
+    "11": {
+      "en": "Thanks",
+      "ar": "شكرا"
+    }
+  }
+}
