@@ -15,5 +15,5 @@ pandas>=2.1,<3
 # Landmark extraction (MediaPipe Tasks API: HandLandmarker + PoseLandmarker)
 mediapipe>=0.10.14,<0.11
 
-# Model inference (Keras .keras model)
-tensorflow>=2.15,<2.17
+# Model inference (TFLite only - lightweight, no full TensorFlow needed)
+tflite-runtime>=2.14,<2.15
